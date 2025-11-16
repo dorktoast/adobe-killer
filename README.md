@@ -5,6 +5,8 @@ A Windows batch script that terminates common Adobe background processes (Adobe 
 
 **Sometimes, we are forced, often against our will, to use Adobe software.** Adobe applications are known for spawning many helper processes, some of which continue running even after the main program exits. This script locates and terminates those processes safely.
 
+If you enjoy nonsense like this please support me and my other creative projects on Patreon: https://www.patreon.com/gibgames
+
 ### Features
 - Automatically elevates to Administrator if needed  
 - Fetches an up-to-date process list from the repository (with built-in fallback)  
