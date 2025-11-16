@@ -1,8 +1,5 @@
-:: Adobe Killer: https://github.com/dorktoast/adobe-killer
-:: Adobe has a tendency to leave a lot of processes running for no reason.
-:: This BAT file and it will take care of them.
-:: Best to run as Administrator, because Adobe runs some of its processes as administrator.
-:: This BAT is updated regularly, because Adobe regularly changes its process names.
+:: Adobe Killer https://github.com/dorktoast/adobe-killer
+:: by dorktoast
 
 @echo off
 
@@ -30,7 +27,6 @@ pause
 setlocal enabledelayedexpansion
 
 :: Try to download latest Adobe process list from GitHub
-:: ---------------------------------------------------
 set "PROCESS_LIST_URL=https://raw.githubusercontent.com/dorktoast/adobe-killer/refs/heads/main/processes-list.txt"
 set "PROCESS_LIST_FILE=%TEMP%\adobe-processes.txt"
 set "USE_REMOTE_LIST=0"
@@ -39,7 +35,7 @@ echo(
 echo( Attempting to download latest process list...
 powershell -Command "try { Invoke-WebRequest -UseBasicParsing '%PROCESS_LIST_URL%' -OutFile '%PROCESS_LIST_FILE%' -ErrorAction Stop } catch { exit 1 }"
 if exist "%PROCESS_LIST_FILE%" (
-    echo( Successfully downloaded latest process list from GitHub.
+    echo( Successfully downloaded latest process list.
     set "USE_REMOTE_LIST=1"
 ) else (
     echo( Could not download process list. Using built-in list.
@@ -58,6 +54,7 @@ echo Iteration !ITERATION!
 
 if !ITERATION! GTR !MAX_ITERATIONS! (
     echo Reached maximum iteration limit of !MAX_ITERATIONS!.
+	pause
     goto end
 )
 
