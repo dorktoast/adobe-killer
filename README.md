@@ -17,6 +17,8 @@ A Windows batch script that terminates common Adobe background processes (Adobe 
 
 ## Download & Run
 
+### Easy mode
+You can simply download **kill-adobe.bat** and run it.
 
 ### **PowerShell**
 ```powershell
