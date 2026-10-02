@@ -5,16 +5,25 @@
 "AcrobatNotificationClient.exe"
 "Adobe CEF Helper.exe"
 "Adobe Crash Processor.exe"
+"Creative Cloud.exe"
 "Creative Cloud UI Helper.exe"
 "Creative Cloud Helper.exe"
+Acrobat.exe
+adobe_licensing_helper.exe
 AdobeIPCBroker.exe
+AGSService.exe
 CCLibrary.exe
 armsvc.exe
 AGMService.exe
 AdobeCollabSync.exe
 CCXProcess.exe
+CEPHtmlEngine.exe
 CoreSync.exe
 "Adobe Crash Processor.exe"
 AcroTray.exe
 ADNotificationManager.exe
 AdobeARM.exe
+Illustrator.exe
+LogTransport2.exe
+Photoshop.exe
+UPICustomHook.exe
