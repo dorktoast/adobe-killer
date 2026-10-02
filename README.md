@@ -22,6 +22,11 @@ If you enjoy nonsense like this please support me and my other creative projects
 ### Easy mode
 You can simply download **kill-adobe.bat** and run it.
 
+#### Arguments
+
+* `--noadmin`: Attempts to run Adobe Killer without elevating admin privileges. This may not remove all processes.
+* `--local`: Does not attempt to get a remote process list and uses only the internal list.
+
 ### **PowerShell**
 ```powershell
 Invoke-WebRequest `
@@ -45,14 +50,9 @@ wget -O kill-adobe.bat https://raw.githubusercontent.com/dorktoast/adobe-killer/
 ./kill-adobe.bat
 ```
 
-## Arguments
-
-* `--noadmin`: Attempts to run Adobe Killer without elevating admin privileges. This may not remove all processes.
-* `--local`: Does not attempt to get a remote process list and uses only the internal list.
-
 ## Process List
 
-The script attempts to download the latest list of Adobe processes from `https://raw.githubusercontent.com/dorktoast/adobe-killer/main/processes-list.txt` . If the download fails (offline, firewall, etc.), it uses the built-in list.
+The script attempts to download the latest list of Adobe processes from `https://raw.githubusercontent.com/dorktoast/adobe-killer/main/processes-list.txt` . If the download fails (offline, firewall, etc.) or the `--local` argument is used, it uses the built-in list which was last updated `October 2026`.
 
 ## FAQ
 
@@ -61,8 +61,7 @@ No. The script only terminates _running processes_. It does **not** modify files
 If an Adobe updater is running at the moment you execute the script, it may be closed—but Adobe’s auto-updater will try again later on its own.
 
 ### **Can I use this on a work computer without admin rights?**
-Usually not. Many Adobe background processes run with elevated or SYSTEM privileges, and a standard user cannot terminate them. The script auto-elevates for this reason.
-In most workplace environments, users are also restricted from running arbitrary batch files or scripts, especially those that attempt to kill licensed software processes. Even if the script runs, only a subset of Adobe processes would be killable without admin rights.
+Usually not. Many Adobe background processes run with elevated or SYSTEM privileges, and a standard user cannot terminate them. The script auto-elevates for this reason. You can attempt it by using the `--noadmin` argument. However, in most workplace environments, users are also restricted from running arbitrary batch files or scripts, especially those that attempt to kill licensed software processes. Even if the script runs, only a subset of Adobe processes would be killable without admin rights.
 
 ### **Will this damage my Adobe installation?**
 No. Killing background processes does **not** remove or corrupt any Adobe applications.  
@@ -70,7 +69,7 @@ At worst, you may need to relaunch a program if it was in the middle of somethin
 
 ### **Is it safe to run this while an Adobe app is open?**
 It won’t break anything, but expect the Adobe app to crash or close immediately.  
-The script is intended for use _after_ you're done using Adobe software.
+The script is intended for use _after_ you're done using Adobe software for the day and want to use your computer's memory for other purposes, like playing Minecraft with 8K shaders or something.
 
 ### **Will this interfere with Creative Cloud syncing or fonts?**
 Only temporarily.  If you kill Adobe’s sync or licensing helpers, Creative Cloud will restart them automatically the next time you launch an Adobe app or the Creative Cloud desktop.
@@ -79,10 +78,10 @@ Only temporarily.  If you kill Adobe’s sync or licensing helpers, Creative Clo
 No. It only calls: `taskkill /IM <process> /F` . No file deletion, no configuration changes, nothing persistent.
 
 ### **Can Adobe get angry at me for using this?**
-No. You are simply terminating processes on your own computer. This is normal system administration and completely within your rights.
+No. You are simply terminating processes on your own computer. This is normal system administration and completely within your rights. As a fun note: Adobe has gotten mad at **me** about this script and has contacted me with a very angry email, which I subsequently ignored because I'm just based like that. Do the kids still say "based"? I feel old
 
 ### **Will Adobe just restart the processes anyway?**
 Sometimes, yes. Creative Cloud has services that will self-restart later. This script is meant for freeing up RAM/CPU _right now_, not permanently disabling Adobe services.
 
 ### **Can I schedule this to run automatically?**
-Yes. You can run it from Task Scheduler, a desktop shortcut, or even a startup script. Just keep in mind it will auto-elevate (triggering UAC) unless UAC is disabled or the task is set to “Run with highest privileges.”
+Yes. You can run it from Task Scheduler, a desktop shortcut, or even a startup script. Just keep in mind it will auto-elevate (triggering UAC) unless UAC is disabled, the `--noadmin` flag is set, or the task is set to “Run with highest privileges.”
