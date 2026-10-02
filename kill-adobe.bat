@@ -1,16 +1,30 @@
 :: Adobe Killer https://github.com/dorktoast/adobe-killer
 :: by dorktoast
+::
+:: Usage: adobe-killer.bat [--noadmin] [--local]
+::   --noadmin   Skip admin elevation and try to kill processes as the current user
+::   --local     Don't download the remote process list; use the built-in list only
 
 @echo off
 
+:: Parse arguments
+set "NOADMIN=0"
+set "LOCAL=0"
+for %%A in (%*) do (
+    if /i "%%~A"=="--noadmin" set "NOADMIN=1"
+    if /i "%%~A"=="--local" set "LOCAL=1"
+)
+
 :: Auto-elevation check
-:: Check if running as admin. If not, relaunch as admin.
+:: Check if running as admin. If not, relaunch as admin (unless --noadmin was given).
+if "%NOADMIN%"=="1" goto :skip_elevation
 >nul 2>&1 net session
 if %errorlevel% neq 0 (
     echo Requesting administrative privileges for this session...
 	powershell -Command "Start-Process cmd -ArgumentList '/c \"%~f0\" %*' -Verb RunAs"
 	exit /b
 )
+:skip_elevation
 :: End Auto-elevation check
 
 title Adobe Killer by DorkToast
@@ -21,17 +35,28 @@ echo([97m _/  _\ \__,_^| \___/ _.__/ \___^|[91m   _^|\_\ _^| _^| _^| \___^| _^
 echo(
 echo( Adobe Killer by Dorktoast - [96mhttps://github.com/dorktoast/adobe-killer[0m
 echo(
+if "%NOADMIN%"=="1" (
+    >nul 2>&1 net session
+    if errorlevel 1 echo( [93mRunning without admin rights ^(--noadmin^). Processes owned by SYSTEM or other users may not be killable.[0m
+)
 echo( You are about to terminate all Adobe processes and services. Please close all Adobe programs before proceeding.
 pause
 
 setlocal enabledelayedexpansion
 
-:: Try to download latest Adobe process list from GitHub
 set "PROCESS_LIST_URL=https://raw.githubusercontent.com/dorktoast/adobe-killer/refs/heads/main/processes-list.txt"
 set "PROCESS_LIST_FILE=%TEMP%\adobe-processes.txt"
 set "USE_REMOTE_LIST=0"
 
 echo(
+if "%LOCAL%"=="1" (
+    echo( --local specified. Using built-in process list.
+    goto :after_download
+)
+
+:: Try to download latest Adobe process list from GitHub
+:: Remove any stale copy first so a failed download isn't mistaken for a successful one
+if exist "%PROCESS_LIST_FILE%" del /f /q "%PROCESS_LIST_FILE%" >nul 2>&1
 echo( Attempting to download latest process list...
 powershell -Command "try { Invoke-WebRequest -UseBasicParsing '%PROCESS_LIST_URL%' -OutFile '%PROCESS_LIST_FILE%' -ErrorAction Stop } catch { exit 1 }"
 if exist "%PROCESS_LIST_FILE%" (
@@ -40,6 +65,7 @@ if exist "%PROCESS_LIST_FILE%" (
 ) else (
     echo( Could not download process list. Using built-in list.
 )
+:after_download
 
 :: "Fun" Adobe Facts
 set FACT_COUNT=40
@@ -61,16 +87,16 @@ if !ITERATION! GTR !MAX_ITERATIONS! (
 set KILL_SUCCESS=0
 
 if "!USE_REMOTE_LIST!"=="1" (
-    :: Use the downloaded list from remote target
+    REM Use the downloaded list from remote target
     for /f "usebackq delims=" %%a in ("%PROCESS_LIST_FILE%") do (
-        taskkill /IM %%a /F >nul 2>&1
+        taskkill /IM "%%~a" /F >nul 2>&1
         if !ERRORLEVEL! EQU 0 (
-            echo Killed process: %%a
+            echo Killed process: %%~a
             set KILL_SUCCESS=1
         )
     )
 ) else (
-    :: Use the built-in fallback list
+    REM Use the built-in fallback list
     for %%a in (
         "AdobeUpdateService.exe"
         "Adobe Installer.exe"
@@ -88,11 +114,10 @@ if "!USE_REMOTE_LIST!"=="1" (
         AdobeCollabSync.exe
         CCXProcess.exe
         CoreSync.exe
-        "Adobe Crash Processor.exe"
     ) do (
-        taskkill /IM %%a /F >nul 2>&1
+        taskkill /IM "%%~a" /F >nul 2>&1
         if !ERRORLEVEL! EQU 0 (
-            echo Killed process: %%a
+            echo Killed process: %%~a
             set KILL_SUCCESS=1
         )
     )
