@@ -45,6 +45,11 @@ wget -O kill-adobe.bat https://raw.githubusercontent.com/dorktoast/adobe-killer/
 ./kill-adobe.bat
 ```
 
+## Arguments
+
+* `--noadmin`: Attempts to run Adobe Killer without elevating admin privileges. This may not remove all processes.
+* `--local`: Does not attempt to get a remote process list and uses only the internal list.
+
 ## Process List
 
 The script attempts to download the latest list of Adobe processes from `https://raw.githubusercontent.com/dorktoast/adobe-killer/main/processes-list.txt` . If the download fails (offline, firewall, etc.), it uses the built-in list.

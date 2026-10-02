@@ -98,22 +98,34 @@ if "!USE_REMOTE_LIST!"=="1" (
 ) else (
     REM Use the built-in fallback list
     for %%a in (
-        "AdobeUpdateService.exe"
-        "Adobe Installer.exe"
-        "Adobe Desktop Service.exe"
-        "AdobeNotificationClient.exe"
+        "Acrobat.exe"
         "AcrobatNotificationClient.exe"
+        "AcroTray.exe"
+        "ADNotificationManager.exe"
         "Adobe CEF Helper.exe"
         "Adobe Crash Processor.exe"
-        "Creative Cloud UI Helper.exe"
+        "Adobe Desktop Service.exe"
+        "Adobe Installer.exe"
+        "Adobe NotificationClient.exe"
+        "adobe_licensing_helper.exe"
+        "AdobeARM.exe"
+        "AdobeCollabSync.exe"
+        "AdobeIPCBroker.exe"
+        "AdobeUpdateService.exe"
+        "AGMService.exe"
+        "AGSService.exe"
+        "armsvc.exe"
+        "CCLibrary.exe"
+        "CCXProcess.exe"
+        "CEPHtmlEngine.exe"
+        "CoreSync.exe"
         "Creative Cloud Helper.exe"
-        AdobeIPCBroker.exe
-        CCLibrary.exe
-        armsvc.exe
-        AGMService.exe
-        AdobeCollabSync.exe
-        CCXProcess.exe
-        CoreSync.exe
+        "Creative Cloud UI Helper.exe"
+        "Creative Cloud.exe"
+        "Illustrator.exe"
+        "LogTransport2.exe"
+        "Photoshop.exe"
+        "UPICustomHook.exe"
     ) do (
         taskkill /IM "%%~a" /F >nul 2>&1
         if !ERRORLEVEL! EQU 0 (
